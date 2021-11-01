@@ -1,4 +1,5 @@
 " Author: Bevan Stanely
 " Website: https://bevs.xyz/
 
-lua require('plugins')
+require('settings')    " lua/settings.lua
+lua require('plugins') " lua/plugins.lua
