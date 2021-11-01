@@ -136,5 +136,4 @@ export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/cuda/lib64"
 NPM_PACKAGES="${HOME}/.local/lib/npm/packages"
 NODE_PATH="$NPM_PACKAGES/lib/node_modules:$NODE_PATH"
 PATH="$NPM_PACKAGES/bin:$PATH"
-
-EDITOR=nvim
+export EDITOR="/usr/bin/nvim"
