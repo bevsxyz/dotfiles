@@ -19,4 +19,3 @@ wo.wrap = false
 
 -- buffer-local options
 bo.expandtab = true
-
