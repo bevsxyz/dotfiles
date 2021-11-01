@@ -132,7 +132,7 @@ bindkey -M vicmd 'j' history-substring-search-down
 # My custom variables
 
 export XDG_CONFIG_HOME="${HOME}/.config"
-
+export XDG_CONFIG_DATA="${HOME}/.local/share"
 export CPATH="$CPATH:/opt/cuda/include"
 export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:/opt/cuda/lib64"
 NPM_PACKAGES="${HOME}/.local/lib/npm/packages"
