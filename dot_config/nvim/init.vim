@@ -3,4 +3,3 @@
 
 lua require('settings')    " lua/settings.lua
 lua require('plugins') " lua/plugins.lua
-end
