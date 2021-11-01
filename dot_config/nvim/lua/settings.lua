@@ -14,7 +14,7 @@ o.scrolloff = 12
 -- ... snip ... 
 
 -- window-local options
-wo.number = false
+wo.number = true
 wo.wrap = false
 
 -- buffer-local options
