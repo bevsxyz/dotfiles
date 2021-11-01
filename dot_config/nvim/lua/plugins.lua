@@ -19,6 +19,8 @@ return require('packer').startup(function()
 	-- Packer can manage itself
 	use 'wbthomason/packer.nvim'
 	
+        -- Syntax highlighting
+        use 'sheerun/vim-polyglot'
 	-- Automatically set up your configuration after cloning packer.nvim
   	-- Put this at the end after all plugins
   	if packer_bootstrap then
