@@ -3,4 +3,4 @@
 
 lua require('plugins')
 lua require('settings')
-nmap <leader>n :set relativenumber!<cr>
+nmap <leader>n :set number! relativenumber!<cr>
