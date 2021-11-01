@@ -20,7 +20,7 @@ return require('packer').startup(function()
 	use 'wbthomason/packer.nvim'
 	
 	-- Line Number toggle
-	use 'jeffkreeftmeijer/vim-numbertoggle'
+	--use 'jeffkreeftmeijer/vim-numbertoggle'
 end)
 
 -- ========================================================================================================================
