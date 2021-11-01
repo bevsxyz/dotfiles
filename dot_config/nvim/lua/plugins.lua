@@ -19,8 +19,6 @@ return require('packer').startup(function()
 	-- Packer can manage itself
 	use 'wbthomason/packer.nvim'
 	
-	-- Line Number toggle
-	--use 'jeffkreeftmeijer/vim-numbertoggle'
 	-- Automatically set up your configuration after cloning packer.nvim
   	-- Put this at the end after all plugins
   	if packer_bootstrap then
