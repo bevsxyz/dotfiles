@@ -16,16 +16,20 @@ end
 -- Call all the required plugins ==========================================================================================
 
 return require('packer').startup(function()
-	-- Packer can manage itself
+  -- Packer can manage itself
 	use 'wbthomason/packer.nvim'
 	
-        -- Syntax highlighting
-        use 'sheerun/vim-polyglot'
+  -- Syntax highlighting
+  use 'sheerun/vim-polyglot'
+
+  -- Code completion
+  use {'neoclide/coc.nvim', branch = 'release'}
+
 	-- Automatically set up your configuration after cloning packer.nvim
-  	-- Put this at the end after all plugins
-  	if packer_bootstrap then
-    	  require('packer').sync()
-	end
+  -- Put this at the end after all plugins
+  if packer_bootstrap then
+    require('packer').sync()
+  end
 end)
 
 -- ========================================================================================================================
