@@ -14,8 +14,8 @@ o.scrolloff = 12
 -- ... snip ... 
 
 -- window-local options
-wo.number = false
-wo.wrap = false
+--wo.number = false
+--wo.wrap = false
 
 -- buffer-local options
 bo.expandtab = true
