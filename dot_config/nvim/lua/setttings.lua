@@ -25,6 +25,6 @@ local u = require('utils')
 
 
 u.create_augroup({
-    { 'BufEnter,FocusGained,InsertLeave', 'set relativenumber' }, 
-    { 'BufLeave,FocusLost,InsetEnter', 'setnorelativenumber' },
+    { 'BufEnter,FocusGained,InsertLeave', '*', 'set', 'relativenumber' }, 
+    { 'BufLeave,FocusLost,InsetEnter', '*', 'set', 'norelativenumber' },
 }, 'numbertoggle')
