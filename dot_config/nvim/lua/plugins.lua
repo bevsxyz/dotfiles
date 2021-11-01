@@ -21,6 +21,11 @@ return require('packer').startup(function()
 	
 	-- Line Number toggle
 	--use 'jeffkreeftmeijer/vim-numbertoggle'
+	-- Automatically set up your configuration after cloning packer.nvim
+  	-- Put this at the end after all plugins
+  	if packer_bootstrap then
+    	  require('packer').sync()
+	end
 end)
 
 -- ========================================================================================================================
