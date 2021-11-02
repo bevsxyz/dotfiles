@@ -19,3 +19,5 @@ wo.wrap = false
 
 -- buffer-local options
 bo.expandtab = true
+
+g['ale_disable_lsp'] = 1
