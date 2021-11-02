@@ -24,8 +24,11 @@ return require('packer').startup(function()
 
   -- Code completion
   use {'neoclide/coc.nvim', branch = 'release'}
-
-	-- Automatically set up your configuration after cloning packer.nvim
+  
+  -- Asyncronous Lint Engine
+  use {'dense-analysis/ale',cmd = 'ALEEnable',config = 'vim.cmd[[ALEEnable]]'}
+	
+  -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
   if packer_bootstrap then
     require('packer').sync()
