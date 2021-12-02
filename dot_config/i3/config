@@ -285,7 +285,7 @@ bindsym $mod+p exec /usr/local/bin/switch-audio-port
 
 ## App shortcuts
 bindsym $mod+w exec /usr/bin/firefox
-bindsym $mod+n exec /usr/bin/thunar
+bindsym $mod+n exec /usr/bin/nautilus
 bindsym Print exec "scrot ~/Pictures/screen-shots/%Y-%m-%d-%T-screenshot.png"
 
 ##########################################
