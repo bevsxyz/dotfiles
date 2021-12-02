@@ -172,7 +172,7 @@ bindsym $mod+Shift+Next move container to workspace next; workspace next
 ######################################
 
 # start a terminal
-bindsym $mod+t exec xfce4-terminal
+bindsym $mod+t exec alacritty
 
 # kill focused window
 bindsym $mod+c kill
