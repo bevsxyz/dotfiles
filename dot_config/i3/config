@@ -315,7 +315,7 @@ set $ws10 "10"
 #workspace $ws5 output HDMI-0
 
 # bind program to workspace and focus to them on startup:
-assign [class="Xfce4-terminal"] $ws1
+assign [class="alacritty"] $ws1
 assign [class="(?i)firefox"] $ws2
 assign [class="Thunar"] $ws3
 assign [class="code-oss"] $ws4
@@ -325,7 +325,7 @@ assign [class="org-nlogo-app-App"] $ws4
 assign [class="okular"] $ws5
 
 # automatic set focus new window if it opens on another workspace then the current:
-for_window [class=Xfce4-terminal] focus
+for_window [class=alacritty] focus
 for_window [class=(?i)firefox] focus
 for_window [class=Thunar] focus
 for_window [class=code-oss] focus ; layout tabbed
