@@ -22,6 +22,7 @@ set $menu dmenu_path | dmenu | xargs swaymsg exec --
 
 ### Trackpad Settings
 input 1739:52650:CUST0001:00_06CB:CDAA_Touchpad {
+    tap enabled
     scroll_method edge
     }
 
