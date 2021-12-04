@@ -20,6 +20,9 @@ set $browser firefox
 # on the original workspace that the command was run on.
 set $menu dmenu_path | dmenu | xargs swaymsg exec --
 
+### Trackpad Settings
+exec xinput set-prop "CUST0001:00 06CB:CDAA Touchpad" "libinput Scroll Method Enabled" 0 1 0
+
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
