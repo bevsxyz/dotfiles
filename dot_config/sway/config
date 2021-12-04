@@ -21,7 +21,7 @@ set $browser firefox
 set $menu dmenu_path | dmenu | xargs swaymsg exec --
 
 ### Trackpad Settings
-exec input 2:7:SynPS/2_Synaptics_TouchPad scroll_method edge
+exec input 1739:52650:CUST0001:00_06CB:CDAA_Touchpad scroll_method edge
 
 ### Output configuration
 #
