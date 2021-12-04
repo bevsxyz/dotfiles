@@ -18,7 +18,7 @@ set $browser firefox
 # My preferred application launcher
 # Note: pass the final command to swaymsg so that the resulting window can be opened
 # on the original workspace that the command was run on.
-set $menu nwggrid
+set $menu wofi --show drun
 # dmenu_path | dmenu | xargs swaymsg exec --
 
 ### Trackpad Settings
