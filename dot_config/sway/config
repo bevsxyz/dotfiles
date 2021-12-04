@@ -21,7 +21,7 @@ set $browser firefox
 set $menu dmenu_path | dmenu | xargs swaymsg exec --
 
 ### Trackpad Settings
-exec input set-prop "CUST0001:00 06CB:CDAA Touchpad" scroll_method edge
+exec input "CUST0001:00 06CB:CDAA Touchpad" scroll_method edge
 
 ### Output configuration
 #
