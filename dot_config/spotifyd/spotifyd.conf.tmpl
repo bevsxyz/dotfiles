@@ -33,11 +33,11 @@ backend = "alsa" # use portaudio for macOS [homebrew]
 
 # The alsa audio device to stream audio to. To get a
 # list of valid devices, run `aplay -L`,
-device = "pulse"  # omit for macOS
+device = "pipewire"  # omit for macOS
 
 # The alsa control device. By default this is the same
 # name as the `device` field.
-control = "pulse"  # omit for macOS
+control = "pipewire"  # omit for macOS
 
 # The alsa mixer used by `spotifyd`.
 #mixer = "PCM"  # omit for macOS
