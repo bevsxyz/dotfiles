@@ -28,8 +28,8 @@ data.location=~/Documents/docs/bevs-notes/L3-cache/.task
 #include /usr/share/task/dark-yellow-green.theme
 #include /usr/share/task/dark-gray-256.theme
 #include /usr/share/task/dark-gray-blue-256.theme
-include /usr/share/task/solarized-dark-256.theme
-#include /usr/share/task/solarized-light-256.theme
+#include /usr/share/task/solarized-dark-256.theme
+include /usr/share/task/solarized-light-256.theme
 #include /usr/share/task/no-color.theme
 
 ### taskwarrior-tui configuration options
