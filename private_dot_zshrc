@@ -142,3 +142,7 @@ PATH="$NPM_PACKAGES/bin:$CARGO_HOME/bin:$XDG_CONFIG_HOME/bin:$PATH"
 export GIMP2_DIRECTORY="${XDG_CONFIG_HOME}/GIMP"
 export R_LIBS_SITE="${HOME}/.local/lib/R/x86_64-redhat-linux-gnu-library/4.1"
 fpath=(/usr/share/zsh/site-functions $fpath)
+
+# Custom Aliases
+
+alias t="taskwarrior-tui"
