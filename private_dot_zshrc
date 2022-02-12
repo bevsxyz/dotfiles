@@ -152,3 +152,5 @@ export VISUAL=nvim
 # Use Neovim instead of Vim or Vi
 alias vim=nvim
 alias vi=nvim
+
+export FZF_DEFAULT_COMMAND='rg --files'
