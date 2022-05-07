@@ -624,6 +624,15 @@ This snippet adds a hook to =org-mode= buffers so that =bevsxyz/org-babel-tangle
 
 #+end_src
 
+** Elfeed
+
+#+begin_src emacs-lisp
+
+    (use-package elfeed
+      :bind ("C-x w" . elfeed))
+
+#+end_src
+
 * Development
 
 ** Languages
