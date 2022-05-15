@@ -635,7 +635,16 @@ This snippet adds a hook to =org-mode= buffers so that =bevsxyz/org-babel-tangle
      :custom
      (org-roam-directory "~/projects/org-roam")
      (org-roam-completion-everywhere t)
+     (org-roam-dailies-directory "journal/")
+     (org-roam-dailies-capture-templates
+      '(("d" "default" entry "* %<%I:%M %p>: %?"
+         :if-new (file+head "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n\nMood: %^{Mood}\n\n")
+       )))
      (org-roam-capture-templates
+      '(("d" "default" plain
+         "%?"
+         :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n")
+         :unnarrowed t))
       '(("p" "project" plain (file "~/projects/org-roam/templates/ProjectNoteTemplate.org")
          :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+filetags: Project")
          :unnarrowed t)))
@@ -652,7 +661,7 @@ This snippet adds a hook to =org-mode= buffers so that =bevsxyz/org-babel-tangle
    :config
    (require 'org-roam-dailies) ;; Ensure the keymap is available
    (org-roam-db-autosync-mode)
-  ) 
+  )
 #+end_src
 
 ** Elfeed
