@@ -673,31 +673,26 @@ Some custom function I have stolen from [[https://systemcrafters.net/build-a-sec
 
 #+begin_src emacs-lisp
 
-    (defun org-roam-node-insert-immediate (arg &rest args)
-      (interactive "P")
-      (let ((args (push arg args))
-            (org-roam-capture-templates (list (append (car org-roam-capture-templates)
-                                                      '(:immediate-finish t)))))
-        (apply #'org-roam-node-insert args)))
+  (defun org-roam-node-insert-immediate (arg &rest args)
+    (interactive "P")
+    (let ((args (push arg args))
+          (org-roam-capture-templates (list (append (car org-roam-capture-templates)
+                                                    '(:immediate-finish t)))))
+      (apply #'org-roam-node-insert args)))
 
 
-    (defun bevsxyz/org-roam-filter-by-tag (tag-name)
-          (lambda (node)
-            (member tag-name (org-roam-node-tags node))))
-  (bevsxyz/org-roam-filter-by-tag "Project")
+  (defun bevsxyz/org-roam-list-notes-by-tag (tag-name)
+    (mapcar #'org-roam-node-file
+            (seq-filter
+             (lambda (node) (string-equal (nth 0 (org-roam-node-tags node)) tag-name))
+             (org-roam-node-list))))
 
-    (defun bevsxyz/org-roam-list-notes-by-tag (tag-name)
-        (mapcar #'org-roam-node-file
-                (seq-filter
-                 (bevsxyz/org-roam-filter-by-tag tag-name)
-                 (org-roam-node-list))))
+  (defun bevsxyz/org-roam-refresh-agenda-list ()
+    (interactive)
+    (setq org-agenda-files (bevsxyz/org-roam-list-notes-by-tag "Project")))
 
-    (defun bevsxyz/org-roam-refresh-agenda-list ()
-      (interactive)
-      (setq org-agenda-files (bevsxyz/org-roam-list-notes-by-tag "Project")))
-
-    ;; Build the agenda list the first time for the session
-    (bevsxyz/org-roam-refresh-agenda-list)
+  ;; Build the agenda list the first time for the session
+  (bevsxyz/org-roam-refresh-agenda-list)
 
 #+end_src
 
