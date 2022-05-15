@@ -622,7 +622,7 @@ This snippet adds a hook to =org-mode= buffers so that =bevsxyz/org-babel-tangle
 
   (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'bevsxyz/org-babel-tangle-config)))
 
-#+end_
+#+end_src
 
 ** Second Brain
 
