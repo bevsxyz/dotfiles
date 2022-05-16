@@ -41,7 +41,7 @@ In this document I've added links in many places that lead you to documentation 
     (message "Emacs loaded in %s with %d garbage collections."
              (format "%.2f seconds"
                      (float-time
-                       (time-subtract after-init-time before-init-time)))
+                      (time-subtract after-init-time before-init-time)))
              gcs-done))
 
   (add-hook 'emacs-startup-hook #'bevsxyz/display-startup-time)
@@ -583,9 +583,9 @@ To execute or export code in =org-mode= code blocks, you'll need to set up =org-
 
   (with-eval-after-load 'org
     (org-babel-do-load-languages
-        'org-babel-load-languages
-        '((emacs-lisp . t)
-        (python . t)))
+     'org-babel-load-languages
+     '((emacs-lisp . t)
+       (python . t)))
 
     (push '("conf-unix" . conf-unix) org-src-lang-modes))
 
