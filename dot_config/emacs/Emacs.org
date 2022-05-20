@@ -125,10 +125,10 @@ This section configures basic UI settings that remove unneeded elements to make 
   (tooltip-mode -1)           ; Disable tooltips
   (set-fringe-mode 10)        ; Give some breathing room
 
-  ;(menu-bar-mode -1)            ; Disable the menu bar
+                                          ;(menu-bar-mode -1)            ; Disable the menu bar
 
   ;; Set up the visible bell
-  (setq visible-bell t)
+  (setq visible-bell nil)
 
   (column-number-mode)
   (global-display-line-numbers-mode t)
@@ -842,7 +842,8 @@ Settings for reading and annotating pdf files in emacs.
 
   ;; midnite mode hook
   (add-hook 'pdf-view-mode-hook (lambda ()
-                                  (pdf-view-midnight-minor-mode))) ; automatically turns on midnight-mode for pdfs
+                                  (pdf-view-midnight-minor-mode)
+                                  (blink-cursor-mode -1))) ; automatically turns on midnight-mode for pdfs
 #+end_src
 
 #+begin_src emacs-lisp
@@ -886,6 +887,13 @@ Settings for reading and annotating pdf files in emacs.
                              (org-noter--pretty-print-location location))))))))
     (with-eval-after-load 'pdf-annot
       (add-hook 'pdf-annot-activate-handler-functions #'org-noter-pdftools-jump-to-note)))
+#+end_src
+
+*** Save History of Read Location
+
+#+begin_src emacs-lisp
+  (use-package saveplace-pdf-view
+    :custom (save-place-mode 1))
 #+end_src
 
 * Development
