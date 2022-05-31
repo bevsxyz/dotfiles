@@ -216,6 +216,29 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
 
 #+end_src
 
+*** Better Undo
+
+Sane undo with [[https://codeberg.org/ideasman42/emacs-undo-fu][undo-fu]].
+
+#+begin_src emacs-lisp
+
+  (use-package undo-fu) 
+#+end_src
+
+**** Across Sessions
+
+[[https://codeberg.com/ideasman42/emacs-undo-fu-session][undo-fu-session]] is a better emacs undo package with the session data written to disk. Hence the undo history is available across sessions.
+
+#+begin_src emacs-lisp
+
+  (use-package undo-fu-session
+    :custom
+    (undo-fu-session-incompatible-files '("/COMMIT_EDITMSG\\'" "/git-rebase-todo\\'")))
+
+  (global-undo-fu-session-mode)
+  
+#+end_src
+
 * Key Board Short Cuts
 
 ** Set-up Packages
@@ -257,6 +280,7 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
     (evil-want-keybinding nil)
     (evil-want-C-u-scroll t)
     (evil-want-C-i-jump nil)
+    (evil-undo-system 'undo-fu)
     :config
     (evil-mode 1)
     (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
@@ -289,7 +313,7 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
 
 * Development
 
-* Projectile
+** Projectile
 
 [[https://projectile.mx/][Projectile]] is a project management library for Emacs which makes it a lot easier to navigate around code projects for various languages.  Many packages integrate with Projectile so it's a good idea to have it installed even if you don't use its commands directly.
 
@@ -349,6 +373,7 @@ Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=)
   :hook (prog-mode . rainbow-delimiters-mode))
 
 #+end_src
+
 
 * Organizing with Org
 
@@ -507,6 +532,15 @@ This snippet adds a hook to =org-mode= buffers so that =bevsxyz/org-babel-tangle
         (org-babel-tangle))))
 
   (add-hook 'org-mode-hook (lambda () (add-hook 'after-save-hook #'bevsxyz/org-babel-tangle-config)))
+
+#+end_src
+
+**** Auto Indent
+
+#+begin_src emacs-lisp
+
+  ;; Auto Indent
+  (setq org-src-tab-acts-natively t)
 
 #+end_src
 
