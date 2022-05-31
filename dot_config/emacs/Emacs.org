@@ -20,6 +20,24 @@ of the variables to configure my setup or not depending on how much I crave for 
 
 #+end_src
 
+** Startup Performance
+
+#+begin_src emacs-lisp
+
+  ;; The default is 800 kilobytes.  Measured in bytes.
+  (setq gc-cons-threshold (* 50 1000 1000))
+
+  (defun bevsxyz/display-startup-time ()
+    (message "Emacs loaded in %s with %d garbage collections."
+             (format "%.2f seconds"
+                     (float-time
+                      (time-subtract after-init-time before-init-time)))
+             gcs-done))
+
+  (add-hook 'emacs-startup-hook #'bevsxyz/display-startup-time)
+
+#+end_src
+
 ** Package Manager for Emacs!!
 
 I have used [[https://github.com/jwiegley/use-package][use-package]] for a while now and loved it. It is neat and tidy. I came across [[https://github.com/radian-software/straight.el][Straight.el]] recently and oh boy does it live upto it's
@@ -222,7 +240,8 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
     (bevsxyz/leader-keys
       "t"  '(:ignore t :which-key "toggles")
       "tt" '(counsel-load-theme :which-key "choose theme")
-      "fde" '(lambda () (interactive) (find-file (expand-file-name "~/.local/share/chezmoi/dot_config/emacs/Emacs.org")))))
+      "fde" '(lambda () (interactive)
+               (find-file (expand-file-name "~/.local/share/chezmoi/dot_config/emacs/Emacs.org")))))
 
 #+end_src
 
@@ -268,7 +287,7 @@ I am using the [[https://github.com/tonsky/FiraCode][Fira Code]] and [[https://f
 
 
 
-* Life of Writing
+* Life of Writing/Development
 
 * Organizing with Org
 
@@ -434,6 +453,7 @@ This snippet adds a hook to =org-mode= buffers so that =bevsxyz/org-babel-tangle
 
 [[https://github.com/org-roam/org-roam][Org-roam]] is a org extension to create and manage a second brain. I need to use it to extend my memory!
 
+*** Configuration
 #+begin_src emacs-lisp
   (use-package org-roam
     :custom
@@ -466,5 +486,169 @@ This snippet adds a hook to =org-mode= buffers so that =bevsxyz/org-babel-tangle
     (require 'org-roam-dailies) ;; Ensure the keymap is available
     (org-roam-db-autosync-mode)
     )
+#+end_src
+
+*** Custom Functions
+
+Some custom function I have stolen from [[https://systemcrafters.net/build-a-second-brain-in-emacs/5-org-roam-hacks/][systemcrafters]].
+
+**** Org Agenda
+
+List roam project files with TODO in the org-agenda list of files.
+
+#+begin_src emacs-lisp
+
+  (require 'org-roam)
+  (defun org-roam-node-insert-immediate (arg &rest args)
+    (interactive "P")
+    (let ((args (push arg args))
+          (org-roam-capture-templates (list (append (car org-roam-capture-templates)
+                                                    '(:immediate-finish t)))))
+      (apply #'org-roam-node-insert args)))
+
+
+  (defun bevsxyz/org-roam-list-notes-by-tag (tag-name)
+    (mapcar #'org-roam-node-file
+            (seq-filter
+             (lambda (node) (string-equal (nth 0 (org-roam-node-tags node)) tag-name))
+             (org-roam-node-list))))
+  (defun bevsxyz/org-roam-refresh-agenda-list ()
+    (interactive)
+    (setq org-agenda-files (bevsxyz/org-roam-list-notes-by-tag "Project")))
+
+  ;; Build the agenda list the first time for the session
+  (bevsxyz/org-roam-refresh-agenda-list)
+
+#+end_src
+
+**** Custom Project Find Function
+
+#+begin_src emacs-lisp
+  (defun bevsxyz/org-roam-project-finalize-hook ()
+    "Adds the captured project file to `org-agenda-files' if the
+  capture was not aborted."
+    ;; Remove the hook since it was added temporarily
+    (remove-hook 'org-capture-after-finalize-hook #'bevsxyz/org-roam-project-finalize-hook)
+
+    ;; Add project file to the agenda list if the capture was confirmed
+    (unless org-note-abort
+      (with-current-buffer (org-capture-get :buffer)
+        (add-to-list 'org-agenda-files (buffer-file-name)))))
+
+  (defun bevsxyz/org-roam-find-project ()
+    (interactive)
+    ;; Add the project file to the agenda after capture is finished
+    (add-hook 'org-capture-after-finalize-hook #'bevsxyz/org-roam-project-finalize-hook)
+
+    ;; Select a project file to open, creating it if necessary
+    (org-roam-node-find
+     nil
+     nil
+     (bevsxyz/org-roam-filter-by-tag "Project")
+     :templates
+     '(("p" "project" plain  (file "~/projects/org-roam/templates/ProjectNoteTemplate.org")
+        :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org" "#+title: ${title}\n#+category: ${title}\n#+filetags: Project")
+        :unnarrowed t))))
+
+  (global-set-key (kbd "C-c n p") #'bevsxyz/org-roam-find-project)
+#+end_src
+
+**** Inbox
+
+Capture notes in a single org file for all the spontaneous ideas which later can be refiled.
+
+#+begin_src emacs-lisp
+  (defun bevsxyz/org-roam-capture-inbox ()
+    (interactive)
+    (org-roam-capture- :node (org-roam-node-create)
+                       :templates '(("i" "inbox" plain "* %?"
+                                    :if-new (file+head "Inbox.org" "#+title: Inbox\n")))))
+
+  (global-set-key (kbd "C-c n b") #'bevsxyz/org-roam-capture-inbox)
+#+end_src
+
+**** Capture Tasks to Project
+
+#+begin_src emacs-lisp
+  (defun bevsxyz/org-roam-capture-task ()
+    (interactive)
+    ;; Add the project file to the agenda after capture is finished
+    (add-hook 'org-capture-after-finalize-hook #'bevsxyz/org-roam-project-finalize-hook)
+
+    ;; Capture the new task, creating the project file if necessary
+    (org-roam-capture- :node (org-roam-node-read
+                              nil
+                              (bevsxyz/org-roam-filter-by-tag "Project"))
+                       :templates '(("p" "project" plain "** TODO %?"
+                                     :if-new (file+head+olp "%<%Y%m%d%H%M%S>-${slug}.org"
+                                                            "#+title: ${title}\n#+category: ${title}\n#+filetags: Project"
+                                                            ("Tasks"))))))
+#+end_src
+
+**** Automatically copy (or move) completed tasks to dailies
+
+#+begin_src emacs-lisp
+  (defun bevsxyz/org-roam-copy-todo-to-today ()
+    (interactive)
+    (let ((org-refile-keep t) ;; Set this to nil to delete the original!
+          (org-roam-dailies-capture-templates
+           '(("t" "tasks" entry "%?"
+              :if-new (file+head+olp "%<%Y-%m-%d>.org" "#+title: %<%Y-%m-%d>\n" ("Tasks")))))
+          (org-after-refile-insert-hook #'save-buffer)
+          today-file
+          pos)
+      (save-window-excursion
+        (org-roam-dailies--capture (current-time) t)
+        (setq today-file (buffer-file-name))
+        (setq pos (point)))
+
+      ;; Only refile if the target file is different than the current file
+      (unless (equal (file-truename today-file)
+                     (file-truename (buffer-file-name)))
+        (org-refile nil nil (list "Tasks" today-file nil pos)))))
+
+  (add-to-list 'org-after-todo-state-change-hook
+               (lambda ()
+                 (when (equal org-state "DONE")
+                   (bevsxyz/org-roam-copy-todo-to-today))))
+#+end_src
+
+* Applications
+
+Some special use applications inside emacs are configured here.
+
+** EAF
+
+[[https://github.com/emacs-eaf/emacs-application-framework][Emacs Application Framework]] extends the graphical capabilities of emacs utilising Qt6. It has a number of applications, but we will only use the browser and the pdf reader.
+
+#+begin_src emacs-lisp
+
+  (use-package eaf
+    :straight (eaf
+               :type git
+               :host github
+               :repo "emacs-eaf/emacs-application-framework"           
+               :files ("*.el" "*.py" "core" "app" "*.json")
+               :includes (eaf-pdf-viewer eaf-browser)
+               :pre-build (("./install-eaf.py" "--install" "pdf-viewer browser" "--ignore-sys-deps"))
+               ))
+  (evil-set-initial-state 'eaf-mode 'emacs)
+
+#+end_src
+
+*** Browser
+
+#+begin_src emacs-lisp
+
+  (use-package eaf-browser)
+
+#+end_src
+
+*** PDF Viewer
+
+#+begin_src emacs-lisp
+
+  (use-package eaf-pdf-viewer)
+
 #+end_src
 
