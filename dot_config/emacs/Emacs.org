@@ -239,6 +239,47 @@ Sane undo with [[https://codeberg.org/ideasman42/emacs-undo-fu][undo-fu]].
   
 #+end_src
 
+*** Completions
+
+#+begin_src emacs-lisp
+
+  (use-package vertico
+    :custom
+    (vertico-cycle t)
+    :bind (:map vertico-map
+                ("<tab>" . vertico-insert)
+                ("C-j" . vertico-next)
+                ("C-k" . vertico-previous)
+                ("<escape>" . vertico-exit)
+                :map minibuffer-local-map
+                ("M-h" . backward-kill-word))
+    :init
+    (vertico-mode))
+
+  (use-package savehist
+    :init
+    (savehist-mode))
+
+  (use-package marginalia
+    :after vertico
+    :custom
+    (marginalia-annotators '(marginalia-annotators-heavy marginalia-annotators-light nil))
+    :init
+    (marginalia-mode))
+  (use-package corfu
+    :init
+    (global-corfu-mode))
+
+#+end_src
+
+#+begin_src emacs-lisp
+
+  (use-package orderless
+    :custom
+    (completion-styles '(orderless basic))
+    (completion-category-overrides '((file (styles basic partial-completion)))))
+  
+#+end_src
 * Key Board Short Cuts
 
 ** Set-up Packages
@@ -374,6 +415,14 @@ Emacs' built in commenting functionality =comment-dwim= (usually bound to =M-;=)
 
 #+end_src
 
+** Formatting
+
+#+begin_src emacs-lisp
+
+  (use-package apheleia
+    :init (apheleia-global-mode +1))
+
+#+end_src
 
 * Organizing with Org
 
@@ -725,9 +774,9 @@ Some special use applications inside emacs are configured here.
                :repo "emacs-eaf/emacs-application-framework"           
                :files ("*.el" "*.py" "core" "app" "*.json")
                :includes (eaf-pdf-viewer eaf-browser)
-               :pre-build (("./install-eaf.py" "--install" "pdf-viewer browser" "--ignore-sys-deps"))
-               ))
-  (evil-set-initial-state 'eaf-mode 'emacs)
+               :pre-build (("python" "install-eaf.py" "--install" "pdf-viewer" "browser" "--ignore-sys-deps"))
+               )
+    :init (evil-set-initial-state 'eaf-mode 'emacs))
 
 #+end_src
 
@@ -735,7 +784,10 @@ Some special use applications inside emacs are configured here.
 
 #+begin_src emacs-lisp
 
-  (use-package eaf-browser)
+  (use-package eaf-browser
+    :custom
+    (eaf-browser-continue-where-left-off t)
+    (eaf-browser-enable-adblocker t))
 
 #+end_src
 
