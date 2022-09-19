@@ -1,8 +1,10 @@
 [user]
-	email = {{ .email }}
+    email = {{ .email }}
 	name = {{ .name }}
+[url "ssh://git@gitlab.com/"]
+    insteadOf = https://gitlab.com/
 [core]
-	editor = nvim
+    editor = nvim
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
@@ -14,7 +16,7 @@
 	defaultBranch = main
 
 [github]
-        user = {{ .username }}
+    user = {{ .username }}
 
 [gitlab]
 	user = {{ .username }}
