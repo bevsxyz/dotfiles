@@ -1,0 +1,70 @@
+#!/bin/bash
+# Stolen from https://gist.github.com/LasseKrarup/f59d3563d78bc435ac873c526aaa31ae
+# On fedora need to install pdftk-java, enscript, ghostscript, awk
+# On Arch, the optional dependency "java-commons-lang" must be installed
+
+print_usage() {
+  printf "Usage: ...\n"
+  printf "mergepdf [-f <filename>] [-n]\n"
+  printf "where <filename> is a text file containing file names\n"
+  printf "and [-n] flag adds page numbers\n"
+}
+
+while getopts 'f:n' flag; do
+  case $flag in
+    f) filelist="${OPTARG}" ;;
+    n) n_flag=1 ;;
+    *) print_usage
+       exit 1 ;;
+  esac
+done
+
+if [[ -z "${filelist+set}" ]]; then
+    printf 'You must enter a file list!\n';
+    print_usage
+    exit 1;
+fi
+
+out_file="combined.pdf"
+bookmarks_file="/tmp/bookmarks.txt"
+bookmarks_fmt="BookmarkBegin
+BookmarkTitle: %s
+BookmarkLevel: 1
+BookmarkPageNumber: %d
+"
+
+rm -f "$bookmarks_file" "$out_file"
+
+mapfile -t files < $filelist
+page_counter=1
+
+# Generate bookmarks file.
+for f in "${files[@]}"; do
+    title="${f%.*}"
+    printf "$bookmarks_fmt" "$title" "$page_counter" >> "$bookmarks_file"
+    num_pages="$(pdftk "$f" dump_data | grep NumberOfPages | awk '{print $2}')"
+    page_counter=$((page_counter + num_pages))
+done
+
+# Handle -n flag for page numbering
+if [ ! -z "$n_flag" ]
+    then
+        printf "Mergin PDF with page numbers...\n"
+        stamp_file="/tmp/stamp.pdf"
+        rm -f "$stamp_file"
+        num_all_pages=$((page_counter-1))
+
+        enscript -L1 -b'||$%' -o- < \
+        <(for i in $(seq 1 $num_all_pages); do echo; done) | \
+        ps2pdf - "$stamp_file"
+
+        # Combine PDFs and embed the generated bookmarks file.
+        pdftk "${files[@]}" cat output - | \
+            pdftk - multistamp "$stamp_file" output - | \
+            pdftk - update_info "$bookmarks_file" output "$out_file"
+    else
+        printf "Merging PDF...\n"
+        # Combine PDFs and embed the generated bookmarks file.
+        pdftk "${files[@]}" cat output - | \
+            pdftk - update_info "$bookmarks_file" output "$out_file"
+fi
