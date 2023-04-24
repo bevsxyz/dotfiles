@@ -1,17 +1,14 @@
 [user]
-    email = {{ .email }}
+	email = {{ .email }}
 	name = {{ .name }}
-[url "ssh://git@gitlab.com/"]
-    insteadOf = https://gitlab.com/
 [core]
     editor = nvim
+
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
-[credential]
-	helper = cache
 [init]
 	defaultBranch = main
 
@@ -20,3 +17,10 @@
 
 [gitlab]
 	user = {{ .username }}
+
+[credential "helperselector"]
+	selected = store
+[credential "https://github.com"]
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = !/usr/bin/gh auth git-credential
